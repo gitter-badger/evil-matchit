@@ -1,4 +1,4 @@
-* evil-matchit (v1.4.1)
+* evil-matchit (v1.4.2)
 
 Vim [[http://www.vim.org/scripts/script.php?script_id=39][matchit.vim]] by Benji Fisher ported into Emacs.
 
@@ -56,13 +56,13 @@ Text object "%" is also created. It roughly equal the region when you press "%" 
 
 Inner text object or outer object is the same thing in evil-matchit.
 
-Press "va%" or "vi%" to select line(s) wrapped by tags.
+Press "va%" or "vi%" to select line(s) wrapped by tags. `M-x evilmi-select-items` does the same thing.
 
-Press "da%" or "di%" to delete line(s) wrapped by tags.
+Press "da%" or "di%" to delete line(s) wrapped by tags. `M-x evilmi-delete-items` does the same thing.
 
 All commands support numeric argument like "3%", "5va%" or "9da%"
 
-Please note "3%"  will jump to a line *3 percentage down the file*. It's the default behavior in original evil-mode I try to follow. You can `(setq evilmi-may-jump-by-percentage nil)` to turn off this feature. Then "3%" will *jump 3 times*.
+Please note "3%"  will jump to a line *3 percentage down the file*. It's the default behavior in original evil-mode . You can `(setq evilmi-may-jump-by-percentage nil)` to turn off this feature. Then "3%" will *jump 3 times*.
 
 * Advanced tips
 ** Support more major modes
