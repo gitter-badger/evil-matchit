@@ -40,8 +40,12 @@
 (require 'evil)
 
 (defvar evilmi-plugins '(emacs-lisp-mode
-                         ((evilmi-simple-get-tag evilmi-simple-jump))
-                         ))
+                         ((evilmi-simple-get-tag evilmi-simple-jump)))
+  "The table to define which algorithm to use and when to to jump items")
+
+(defvar evilmi-may-jump-by-percentage t
+  "Simulate evil-jump-item behaviour. For example, press 50% to jump to 50 percentage in buffer.
+If this flag is nil, then 50 means jump 50 times.")
 
 (defun evilmi--operate-on-item (NUM &optional FUNC)
   (let ((plugin (plist-get evilmi-plugins major-mode))
@@ -179,11 +183,31 @@
 (define-key evil-outer-text-objects-map "%" 'evilmi-text-object)
 
 ;;;###autoload
+(defun evilmi-jump-to-percentage (NUM)
+  "Re-implementation of evil's similar functionality"
+  (interactive "P")
+  (let (dst)
+    (when (and NUM (> NUM 0))
+      (setq dst (let ((size (- (point-max) (point-min))))
+                  (+ (point-min)
+                     (if (> size 80000)
+                         (* NUM (/ size 100))
+                       (/ (* NUM size) 100)))))
+      (cond
+       ((< dst (point-min))
+        (setq dst (point-min)))
+       ((> dst (point-max))
+        (setq dst (point-max))))
+      (goto-char dst)
+      (back-to-indentation))))
+
+;;;###autoload
 (defun evilmi-jump-items (&optional NUM)
   "jump between item/tag(s)"
   (interactive "P")
   (cond
-   (NUM (evil-jump-item NUM))
+   ((and evilmi-may-jump-by-percentage NUM)
+    (evilmi-jump-to-percentage NUM))
    (t (evilmi--operate-on-item NUM))
    ))
 
